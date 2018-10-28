@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HeroService } from '../hero.service';
 import { Hero } from '../hero';
+import { Store } from '@ngrx/store';
+import { AppStore } from '../store/models/app-store.interface';
+import { HeroesList } from '../store/models/heroes-list.interface';
 
 
 @Component({
@@ -10,23 +13,17 @@ import { Hero } from '../hero';
 })
 export class DashboardComponent implements OnInit {
 
-  heroes: Hero[]
+  heroes: Hero[];
 
   constructor(
-    private heroService: HeroService
+    private heroService: HeroService,
+    private store: Store<AppStore>
   ) { }
 
   ngOnInit() {
-    this.getHeroes()
-  }
-
-  getHeroes(): void {
-    this.heroService.getHeroes()
+    this.store.select('heroes')
       .subscribe(
-        (heroes: Hero[]) => {
-          this.heroes = heroes.slice(0, 4);
-        }
-      );
+        (heroes: HeroesList) => this.heroes = heroes.list.slice(0, 4));
   }
 
 }

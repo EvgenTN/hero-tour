@@ -43,7 +43,8 @@ getHero(id: number): Observable<Hero> {
 
 /** PUT: update the hero on the server */
 updateHero (hero: Hero): Observable<any> {
-  return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
+  const url = `${this.heroesUrl}/${hero.id}`;
+  return this.http.patch(url, hero, httpOptions).pipe(
     tap(_ => this.log(`updated hero id=${hero.id}`)),
     catchError(this.handleError<any>('updateHero'))
   );
